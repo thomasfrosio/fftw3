@@ -291,7 +291,6 @@ target_compile_options(fftw3_private_options INTERFACE
 target_link_libraries(fftw3_private_options INTERFACE $<$<BOOL:HAVE_LIBM>:m>)
 
 target_include_directories(fftw3_private_options INTERFACE "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>")
-target_include_directories(fftw3_public_options INTERFACE $<INSTALL_INTERFACE:include>) # FIXME
 
 # Set double and single precision libraries.
 add_library(fftw3 STATIC ${SOURCEFILES})
@@ -348,7 +347,8 @@ install(
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install (FILES api/fftw3.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES api/fftw3.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES api/fftw3.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/fftw3)
 
 # CMake config files:
 include(CMakePackageConfigHelpers)
