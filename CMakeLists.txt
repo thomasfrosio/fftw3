@@ -11,7 +11,7 @@ if (POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
 endif ()
 
-option(FFTW3_BUILD_TESTS "Build tests" OFF)
+option(FFTW3_BUILD_TESTS "Build tests" ON)
 option(FFTW3_ENABLE_OPENMP "Use OpenMP for multithreading" OFF)
 option(FFTW3_ENABLE_THREADS "Use pthread for multithreading" OFF)
 option(FFTW3_ENABLE_SSE "Compile with SSE instruction set support" ON)
@@ -298,8 +298,16 @@ add_library(fftw3f STATIC ${SOURCEFILES})
 add_library(FFTW3::fftw3 ALIAS fftw3)
 add_library(FFTW3::fftw3f ALIAS fftw3f)
 
+# Include the generated config.h:
 target_include_directories(fftw3 PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/double)
 target_include_directories(fftw3f PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/float)
+
+# In order to not collide with the system wide FFTW3 (e.g. /usr/include/fftw3.h), we also install the
+# header inside the includedir/fftw3 directory. Doing so, projects can then do #include <fftw3/fftw3.h>
+# instead of #include <fftw3.h>.
+# This is to provide a consist include scheme before build/install time (e.g. when the project is fetched):
+file(COPY api/fftw3.h DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/include/fftw3)
+target_include_directories(fftw3_public_options INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>)
 
 set(targets fftw3 fftw3f)
 foreach (target ${targets})
