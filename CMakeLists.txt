@@ -385,7 +385,7 @@ install(FILES
 
 # Export:
 install(EXPORT FFTW3
-    FILE FFTW3LibraryDepends.cmake
+    FILE FFTW3Targets.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fftw3
     NAMESPACE FFTW3::
 )
